@@ -30,15 +30,25 @@ APK: `launcher/app/build/outputs/apk/release/app-release.apk`.
 
 The 2026-10-22 release build completed successfully and produced a 481,243-byte APK. ADB installation for user 0 returned `Success`. The theme was written through `content://com.gathin.tvhome.theme/config.json` and read back from the provider.
 
-## Handover evidence and current blocker
+## Handover evidence
 
 Setting Home while Google TV's launcher remained enabled did not take over Home: the resolver and resumed activity still selected `com.google.android.apps.tv.launcherx/.home.HomeActivity`.
 
 The original package states and launcher APKs were backed up locally. `com.google.android.tungsten.setupwraith` was disabled first, followed by `com.google.android.apps.tv.launcherx`, both for user 0. No other existing package was disabled, uninstalled, or cleared.
 
-The target then became ADB-offline and unreachable on the network before the final Home command could be confirmed. A successful launch intent and a momentary resumed MainActivity do not prove the launcher rendered: the captured preview still showed Google TV. Home, app launch, and remote interaction therefore remain unverified.
+The target briefly became ADB-offline and unreachable on the network. After the user confirmed connectivity at the same IP, ADB returned, `set-home-activity` succeeded, and both the resolver and foreground activity selected `com.gathin.tvhome/.MainActivity`. The final screenshot shows the configured YouTube and Netflix dock.
 
-Recover connectivity from the TV's Settings using the remote. Do not factory reset or reboot into an uncertain setup-wizard state. Check the current IP, enable debugging if needed, and authorize the computer if asked. The model-specific upstream warning is in `examples/xiaomi-tv-a-pro-2026/debloat.txt`; do not apply its full debloat list for a launcher-only migration.
+The live remote-key smoke covered:
+
+- Opening Netflix and YouTube from their dock tiles with OK, then returning to CleanYourTV with Home.
+- Holding OK to open Replace, Move, Remove from Home, and App info.
+- Navigating to Launcher settings and seeing layout controls.
+- Opening App library, which listed 22 apps.
+- Opening Inputs, which listed PlayStation 4 on HDMI 1, HDMI 2, HDMI 3, AV, and Live TV.
+
+The final disabled-package comparison showed exactly the two launcher packages above newly disabled, with no pre-existing disabled package re-enabled. Streaming playback, casting, USB playback, reboot persistence, and the affirmative restore path were not exercised.
+
+If connectivity is lost during a future handover, recover it through TV Settings with the remote; check the IP and debugging authorization. Do not factory reset or reboot into an uncertain setup-wizard state. The model-specific upstream warning is in `examples/xiaomi-tv-a-pro-2026/debloat.txt`; do not apply its full debloat list for a launcher-only migration.
 
 ## Interactive recovery
 
@@ -52,6 +62,6 @@ Alternatively, from the repository root:
 powershell -NoProfile -ExecutionPolicy Bypass -File tools/restore-home.ps1 -BackupPath "backup/<your-backup-folder>"
 ```
 
-The PowerShell script was parsed successfully and its interactive cancellation path was exercised without changes. The affirmative recovery path requires a connected TV and has not yet been exercised.
+The PowerShell script was parsed successfully and its interactive cancellation path was exercised without changes. The affirmative recovery path has not been exercised.
 
 Backup dumps, screenshots, signing material, and APKs stay local and are not included in Git.
