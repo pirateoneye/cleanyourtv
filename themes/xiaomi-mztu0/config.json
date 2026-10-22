@@ -1,0 +1,18 @@
+{
+  "dock_apps": ["com.google.android.youtube.tv", "com.netflix.ninja"],
+  "fill_dock": false,
+  "hidden_apps": ["com.mitv.livetv", "com.mitv.gallery"],
+  "live_tv_package": "com.mitv.livetv",
+  "columns": 4,
+  "rows_below_dock": 1,
+  "launcher_settings_button": true,
+  "tile_menu": true,
+  "app_library": true,
+  "library_button": true,
+  "icon_only_buttons": true,
+  "wifi_label_width": 0,
+  "animations": true,
+  "advanced_effects": false,
+  "background_color": "#000000",
+  "wallpaper": false
+}
